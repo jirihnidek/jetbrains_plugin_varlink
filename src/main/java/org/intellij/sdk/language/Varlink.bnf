@@ -1,0 +1,102 @@
+{
+  parserClass="org.intellij.sdk.language.parser.VarlinkParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Varlink"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.intellij.sdk.language.psi"
+  psiImplPackage="org.intellij.sdk.language.psi.impl"
+
+  elementTypeHolderClass="org.intellij.sdk.language.psi.VarlinkTypes"
+  elementTypeClass="org.intellij.sdk.language.psi.VarlinkElementType"
+  tokenTypeClass="org.intellij.sdk.language.psi.VarlinkTokenType"
+
+  // Named members (type / method / error / field) share a common interface so
+  // utilities and the future annotator can treat them uniformly.
+  implements("typeAlias|methodDeclaration|errorDeclaration|field")="org.intellij.sdk.language.psi.VarlinkNamedElement"
+  extends("typeAlias|methodDeclaration|errorDeclaration|field")="org.intellij.sdk.language.psi.impl.VarlinkNamedElementImpl"
+
+  tokens=[
+    INTERFACE_KEYWORD="interface"
+    TYPE_KEYWORD="type"
+    METHOD_KEYWORD="method"
+    ERROR_KEYWORD="error"
+
+    BOOL_KEYWORD="bool"
+    INT_KEYWORD="int"
+    FLOAT_KEYWORD="float"
+    STRING_KEYWORD="string"
+    OBJECT_KEYWORD="object"
+    ANY_KEYWORD="any"
+
+    ARROW="->"
+    ARRAY="[]"
+    MAP="[string]"
+    LPAREN="("
+    RPAREN=")"
+    COMMA=","
+    COLON=":"
+    QUESTION="?"
+
+    IDENTIFIER="identifier"
+    COMMENT="comment"
+  ]
+}
+
+// varlink-file : a single interface definition.
+varlinkFile ::= interfaceDeclaration
+
+// interface <reverse.domain.name> followed by its members.
+interfaceDeclaration ::= INTERFACE_KEYWORD IDENTIFIER member* {
+  pin=1
+}
+
+// A member is a type alias, a method or an error. It is private so the concrete
+// members become direct children of the interface declaration, which gives
+// generated accessors such as getTypeAliasList() / getMethodDeclarationList().
+private member ::= typeAlias | methodDeclaration | errorDeclaration
+
+// type <Name> ( ... )   -- the body is a struct or an enum, both parenthesised.
+typeAlias ::= TYPE_KEYWORD IDENTIFIER struct {
+  pin=1
+}
+
+// method <Name> ( ... ) -> ( ... )
+methodDeclaration ::= METHOD_KEYWORD IDENTIFIER struct ARROW struct {
+  pin=1
+}
+
+// error <Name> ( ... )
+errorDeclaration ::= ERROR_KEYWORD IDENTIFIER struct {
+  pin=1
+}
+
+// A parenthesised body. It is shared by struct and enum definitions: every
+// field may optionally carry a type, which distinguishes the two in practice.
+struct ::= LPAREN fieldList? RPAREN {
+  pin=1
+}
+
+// Private so a struct exposes its fields directly via getFieldList().
+private fieldList ::= field (COMMA field)*
+
+// field : "name: type" for a struct, or just "name" for an enum value.
+field ::= IDENTIFIER (COLON type)? {
+  pin=1
+}
+
+// type : an optional '?', any number of '[]' / '[string]' wrappers, then the
+// base (element) type.
+type ::= QUESTION? (ARRAY | MAP)* baseType
+
+baseType ::= basicType
+          | struct
+          | IDENTIFIER
+
+basicType ::= BOOL_KEYWORD
+           | INT_KEYWORD
+           | FLOAT_KEYWORD
+           | STRING_KEYWORD
+           | OBJECT_KEYWORD
+           | ANY_KEYWORD
