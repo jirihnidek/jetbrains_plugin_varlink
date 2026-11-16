@@ -103,4 +103,59 @@ public class VarlinkAnnotatorTest extends BasePlatformTestCase {
                         "method IsRegistered() -> (registered: bool)\n");
         assertEmpty(errors);
     }
+
+    public void testUnresolvedTypeInMethodParameterIsError() {
+        List<HighlightInfo> errors = errorsFor(
+                "interface org.example.test\n" +
+                        "method Ping(foo: Foo) -> ()\n");
+        assertSize(1, errors);
+        assertAllContain(errors, "Unresolved type 'Foo'");
+    }
+
+    public void testUnresolvedTypeInMethodOutputIsError() {
+        List<HighlightInfo> errors = errorsFor(
+                "interface org.example.test\n" +
+                        "method Ping() -> (result: Foo)\n");
+        assertSize(1, errors);
+        assertAllContain(errors, "Unresolved type 'Foo'");
+    }
+
+    public void testUnresolvedTypeInTypeBodyIsError() {
+        List<HighlightInfo> errors = errorsFor(
+                "interface org.example.test\n" +
+                        "type Bar(foo: Foo)\n");
+        assertSize(1, errors);
+        assertAllContain(errors, "Unresolved type 'Foo'");
+    }
+
+    public void testUnresolvedTypeInErrorBodyIsError() {
+        List<HighlightInfo> errors = errorsFor(
+                "interface org.example.test\n" +
+                        "error Boom(foo: Foo)\n");
+        assertSize(1, errors);
+        assertAllContain(errors, "Unresolved type 'Foo'");
+    }
+
+    public void testUnresolvedTypeThroughMarkersIsError() {
+        List<HighlightInfo> errors = errorsFor(
+                "interface org.example.test\n" +
+                        "method Ping(foo: ?[]Foo) -> ()\n");
+        assertSize(1, errors);
+        assertAllContain(errors, "Unresolved type 'Foo'");
+    }
+
+    public void testResolvedCustomTypeIsNotError() {
+        List<HighlightInfo> errors = errorsFor(
+                "interface org.example.test\n" +
+                        "type Foo(a: int)\n" +
+                        "method Ping(foo: Foo) -> (copy: Foo)\n");
+        assertEmpty(errors);
+    }
+
+    public void testBuiltInTypeIsNotError() {
+        List<HighlightInfo> errors = errorsFor(
+                "interface org.example.test\n" +
+                        "method Ping(flag: bool, name: string) -> (ok: bool)\n");
+        assertEmpty(errors);
+    }
 }

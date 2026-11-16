@@ -54,6 +54,8 @@
         <lang.foldingBuilder
                 language="Varlink"
                 implementationClass="org.intellij.sdk.language.VarlinkFoldingBuilder"/>
+        <gotoSymbolContributor
+                implementation="org.intellij.sdk.language.VarlinkSymbolContributor"/>
     </extensions>
 
 </idea-plugin>
