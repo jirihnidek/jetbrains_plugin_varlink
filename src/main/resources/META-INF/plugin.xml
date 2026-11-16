@@ -59,6 +59,9 @@
         <lang.psiStructureViewFactory
                 language="Varlink"
                 implementationClass="org.intellij.sdk.language.VarlinkStructureViewFactory"/>
+        <lang.commenter
+                language="Varlink"
+                implementationClass="org.intellij.sdk.language.VarlinkCommenter"/>
     </extensions>
 
 </idea-plugin>
