@@ -1,0 +1,36 @@
+# This is testing .varlink file containing invalid
+# definition of interface. There are lot of duplicates.
+# This file is intended only for testing purpose.
+
+interface com.example.testing.duplicity
+
+# First definition of method Foo()
+# (Should be marked with some error)
+method Foo() -> ()
+
+
+# Second definition of method Foo() with same parameter.
+# (Should be marked with some error)
+method Foo() -> ()
+
+# Third definition of method Foo() with different parameters (error)
+# (Should be marked with some error)
+method Foo(
+    bar: int
+) -> (
+    pub: int
+)
+
+# The last definition of method Foo() with completely different parameters
+# (Should be marked with some error)
+method Foo(
+    foo: bool
+) -> (
+    bar: string
+)
+
+# The new type having the same duplicity name Foo
+# (Should be marked with some error)
+type Foo (
+    foo: int
+)
