@@ -45,6 +45,9 @@
         <completion.contributor
                 language="Varlink"
                 implementationClass="org.intellij.sdk.language.VarlinkCompletionContributor"/>
+        <psi.referenceContributor
+                language="Varlink"
+                implementation="org.intellij.sdk.language.VarlinkReferenceContributor"/>
     </extensions>
 
 </idea-plugin>

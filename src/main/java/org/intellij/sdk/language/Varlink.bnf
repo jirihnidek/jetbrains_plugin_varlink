@@ -17,6 +17,11 @@
   implements("typeAlias|methodDeclaration|errorDeclaration|field")="org.intellij.sdk.language.psi.VarlinkNamedElement"
   extends("typeAlias|methodDeclaration|errorDeclaration|field")="org.intellij.sdk.language.psi.impl.VarlinkNamedElementImpl"
 
+  // A base type that is a bare identifier references a custom type declaration.
+  // The mixin makes it a ContributedReferenceHost so the reference contributor applies.
+  implements("baseType")="com.intellij.psi.ContributedReferenceHost"
+  extends("baseType")="org.intellij.sdk.language.psi.impl.VarlinkBaseTypeMixin"
+
   tokens=[
     INTERFACE_KEYWORD="interface"
     TYPE_KEYWORD="type"
