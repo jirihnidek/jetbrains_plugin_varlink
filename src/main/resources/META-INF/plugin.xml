@@ -42,6 +42,9 @@
         <lang.braceMatcher
                 language="Varlink"
                 implementationClass="org.intellij.sdk.language.VarlinkBraceMatcher"/>
+        <completion.contributor
+                language="Varlink"
+                implementationClass="org.intellij.sdk.language.VarlinkCompletionContributor"/>
     </extensions>
 
 </idea-plugin>
