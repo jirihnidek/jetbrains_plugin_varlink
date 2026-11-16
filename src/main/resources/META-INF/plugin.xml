@@ -51,6 +51,9 @@
         <lang.findUsagesProvider
                 language="Varlink"
                 implementationClass="org.intellij.sdk.language.VarlinkFindUsagesProvider"/>
+        <lang.foldingBuilder
+                language="Varlink"
+                implementationClass="org.intellij.sdk.language.VarlinkFoldingBuilder"/>
     </extensions>
 
 </idea-plugin>
