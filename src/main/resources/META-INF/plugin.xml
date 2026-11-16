@@ -39,6 +39,9 @@
         <annotator
                 language="Varlink"
                 implementationClass="org.intellij.sdk.language.VarlinkAnnotator"/>
+        <lang.braceMatcher
+                language="Varlink"
+                implementationClass="org.intellij.sdk.language.VarlinkBraceMatcher"/>
     </extensions>
 
 </idea-plugin>
