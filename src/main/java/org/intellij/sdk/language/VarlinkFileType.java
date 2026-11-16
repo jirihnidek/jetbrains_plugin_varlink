@@ -33,6 +33,6 @@ public class VarlinkFileType extends LanguageFileType{
 
     @Override
     public Icon getIcon() {
-        return VarlinkIcons.FILE;
+        return VarlinkIcons.VARLINK_FILE;
     }
 }

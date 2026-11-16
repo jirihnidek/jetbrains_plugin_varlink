@@ -54,7 +54,7 @@ public class VarlinkCompletionContributor extends CompletionContributor {
                             String name = typeAlias.getName();
                             if (name != null && !name.isEmpty()) {
                                 result.addElement(LookupElementBuilder.create(name)
-                                        .withIcon(VarlinkIcons.FILE)
+                                        .withIcon(VarlinkIcons.VARLINK_FILE)
                                         .withTypeText("varlink type"));
                             }
                         }

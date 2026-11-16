@@ -80,7 +80,7 @@ public abstract class VarlinkNamedElementImpl extends ASTWrapperPsiElement imple
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return VarlinkIcons.FILE;
+                return VarlinkIcons.VARLINK_FILE;
             }
         };
     }

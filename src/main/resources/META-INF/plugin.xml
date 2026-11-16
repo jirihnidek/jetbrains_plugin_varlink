@@ -56,6 +56,9 @@
                 implementationClass="org.intellij.sdk.language.VarlinkFoldingBuilder"/>
         <gotoSymbolContributor
                 implementation="org.intellij.sdk.language.VarlinkSymbolContributor"/>
+        <lang.psiStructureViewFactory
+                language="Varlink"
+                implementationClass="org.intellij.sdk.language.VarlinkStructureViewFactory"/>
     </extensions>
 
 </idea-plugin>
