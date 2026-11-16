@@ -48,6 +48,9 @@
         <psi.referenceContributor
                 language="Varlink"
                 implementation="org.intellij.sdk.language.VarlinkReferenceContributor"/>
+        <lang.findUsagesProvider
+                language="Varlink"
+                implementationClass="org.intellij.sdk.language.VarlinkFindUsagesProvider"/>
     </extensions>
 
 </idea-plugin>
