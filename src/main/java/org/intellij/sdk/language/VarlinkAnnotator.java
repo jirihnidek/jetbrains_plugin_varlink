@@ -45,12 +45,13 @@ public class VarlinkAnnotator implements Annotator {
             // Field names must be unique within each struct / enum body.
             annotateDuplicates(VarlinkUtil.findDuplicateFields(struct), holder);
         } else if (element instanceof VarlinkBaseType baseType) {
-            // A custom type usage must resolve to a type declared in the file.
-            annotateUnresolvedType(baseType, holder);
+            // A bare-identifier base type is a usage of a custom type: colour it as a
+            // foreign type reference, and flag it when it resolves to nothing.
+            annotateCustomType(baseType, holder);
         }
     }
 
-    private static void annotateUnresolvedType(@NotNull VarlinkBaseType baseType, @NotNull AnnotationHolder holder) {
+    private static void annotateCustomType(@NotNull VarlinkBaseType baseType, @NotNull AnnotationHolder holder) {
         // Built-in types and inline structs are not references to a declaration.
         if (baseType.getBasicType() != null || baseType.getStruct() != null) {
             return;
@@ -59,6 +60,15 @@ public class VarlinkAnnotator implements Annotator {
         if (identifier == null) {
             return;
         }
+        // Distinguish a field whose type is a foreign object (e.g. the 'Bar' in
+        // 'type MyType ( bar: Bar )') from the built-in types the lexer already
+        // colours. The lexer cannot do this because every name is one IDENTIFIER
+        // token; only here is the identifier known to be a type reference.
+        holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(identifier.getTextRange())
+                .textAttributes(VarlinkSyntaxHighlighter.TYPE_REFERENCE)
+                .create();
+
         PsiReference[] references = baseType.getReferences();
         if (references.length == 0) {
             return;

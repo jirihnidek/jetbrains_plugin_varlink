@@ -1,6 +1,5 @@
 package org.intellij.sdk.language;
 
-//     com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.NotNull;
 

@@ -158,4 +158,32 @@ public class VarlinkAnnotatorTest extends BasePlatformTestCase {
                         "method Ping(flag: bool, name: string) -> (ok: bool)\n");
         assertEmpty(errors);
     }
+
+    /** All INFORMATION-severity highlights produced for the given interface source. */
+    private List<HighlightInfo> infosFor(String source) {
+        myFixture.configureByText("test.varlink", source);
+        return myFixture.doHighlighting(HighlightSeverity.INFORMATION);
+    }
+
+    public void testCustomTypeReferenceIsHighlighted() {
+        // The 'Bar' usage must be tagged with the foreign-type-reference attribute.
+        List<HighlightInfo> infos = infosFor(
+                "interface org.example.test\n" +
+                        "type Bar(a: int)\n" +
+                        "type MyType(bar: Bar)\n");
+        boolean highlighted = infos.stream().anyMatch(info ->
+                "Bar".equals(info.getText())
+                        && VarlinkSyntaxHighlighter.TYPE_REFERENCE.equals(info.forcedTextAttributesKey));
+        assertTrue("Expected 'Bar' to be highlighted as a custom type reference", highlighted);
+    }
+
+    public void testBuiltInTypeIsNotHighlightedAsReference() {
+        // Built-in types are coloured by the lexer, not as foreign references.
+        List<HighlightInfo> infos = infosFor(
+                "interface org.example.test\n" +
+                        "type MyType(count: int)\n");
+        boolean highlighted = infos.stream().anyMatch(info ->
+                VarlinkSyntaxHighlighter.TYPE_REFERENCE.equals(info.forcedTextAttributesKey));
+        assertFalse("Built-in type must not get the custom type reference attribute", highlighted);
+    }
 }

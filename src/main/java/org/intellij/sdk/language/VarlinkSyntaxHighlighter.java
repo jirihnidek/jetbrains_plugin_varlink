@@ -16,7 +16,12 @@ public class VarlinkSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey KEYWORD =
             createTextAttributesKey("VARLINK_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey BUILTIN_TYPE =
-            createTextAttributesKey("VARLINK_BUILTIN_TYPE", DefaultLanguageHighlighterColors.CLASS_NAME);
+            createTextAttributesKey("VARLINK_BUILTIN_TYPE", DefaultLanguageHighlighterColors.KEYWORD);
+    // Applied semantically by VarlinkAnnotator: a field whose type is a reference to
+    // a custom type declaration (e.g. the 'Bar' in 'type MyType ( bar: Bar )').
+    // The lexer cannot set it because every name is a single IDENTIFIER token.
+    public static final TextAttributesKey TYPE_REFERENCE =
+            createTextAttributesKey("VARLINK_TYPE_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
     public static final TextAttributesKey IDENTIFIER =
             createTextAttributesKey("VARLINK_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
     public static final TextAttributesKey COMMENT =
